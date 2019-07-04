@@ -76,7 +76,7 @@ app.get('/api/v1/map/get/multisource', (req, res) => {
             return {
                 idUser: data.iduser,
                 nama: data.nama,
-                mag: data.magnitudo,
+                mag: parseFloat(data.magnitudo),
                 time: `${data.tanggalgempa} ${data.waktugempa}`,
                 reportTime: data.waktupelaporan,
                 newslink: null,
@@ -91,7 +91,7 @@ app.get('/api/v1/map/get/multisource', (req, res) => {
             return {
                 idUser: null,
                 nama: null,
-                mag: data.Magnitude,
+                mag: parseFloat(data.Magnitude),
                 time: `${data.Tanggal} ${data.Jam}`,
                 reportTime: null,
                 newslink: null,

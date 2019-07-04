@@ -170,15 +170,26 @@
       makeInfoBox(infoBoxDiv, map);
       map.controls[google.maps.ControlPosition.TOP_CENTER].push(infoBoxDiv);
 
-      function getCircle() {
-        return {
-          path: google.maps.SymbolPath.CIRCLE,
-          fillColor: 'red',
-          fillOpacity: .5,
-          scale: Math.pow(2, 5) / 2,
-          strokeColor: 'white',
-          strokeWeight: .5
-        };
+      function getCircle(mag) {
+        if (mag != null && mag != 0) {
+          return {
+            path: google.maps.SymbolPath.CIRCLE,
+            fillColor: 'red',
+            fillOpacity: .5,
+            scale: Math.pow(2, mag) / 2,
+            strokeColor: 'white',
+            strokeWeight: .5
+          };
+        } else {
+          return {
+            path: google.maps.SymbolPath.CIRCLE,
+            fillColor: 'white',
+            fillOpacity: .2,
+            scale: Math.pow(2, 3) / 2,
+            strokeColor: 'red',
+            strokeWeight: .8
+          };
+        }
       }
 
       $.get("http://localhost:5000/api/v1/map/get/multisource").done(data => {
@@ -213,18 +224,21 @@
             type: "FeatureCollection",
             features: features
           }
+          console.log(mapData);
+
           map.data.setStyle(function (feature) {
+            var mag = feature.getProperty('mag');
             return {
-              icon: getCircle()
+              icon: getCircle(mag)
             };
           });
           map.data.addGeoJson(mapData);
           map.data.addListener('mouseover', function (e) {
-            console.log(e.feature.toGeoJSON());
+            console.log(e.feature.getProperty("mag"));
           })
         }
       }).fail(err => {
-        console.log(err);
+        // console.log(err);
       })
     }
     (function ($) {
