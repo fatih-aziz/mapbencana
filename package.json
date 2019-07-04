@@ -2,14 +2,19 @@
   "name": "mapbencana",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "functions/index.js",
   "babel": {
-    "presets": ["@babel/preset-env"]
+    "presets": [
+      "@babel/preset-env"
+    ]
   },
   "scripts": {
-    "start": "node ./bin/www",
-    "server": "nodemon --exec babel-node server.js",
+    "start": "nodemon --exec babel-node functions/index.js",
+    "server": "nodemon --exec babel-node index.js",
     "dev": "NODE_ENV=development npm-run-all server"
+  },
+  "engines": {
+    "node": "8"
   },
   "author": "",
   "license": "ISC",

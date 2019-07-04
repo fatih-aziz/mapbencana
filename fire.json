@@ -1,8 +1,0 @@
-{
-  "GCLOUD_PROJECT": "fcmfirebaseproject-83799",
-  "FIREBASE_CONFIG": {
-    "databaseURL": "https://surveysensor-55f21.firebaseio.com/",
-    "storageBucket": "fcmfirebaseproject-83799.appspot.com/",
-    "projectId": "fcmfirebaseproject-83799"
-  }
-}

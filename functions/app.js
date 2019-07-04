@@ -1,17 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
-import fs from 'fs';
 import Promise from 'bluebird';
-import parser from 'xml2json-light';
 import request from 'request';
 const Client = require('node-rest-client').Client;
-import fetch from 'node-fetch';
-import {
-    DataSnapshot
-} from 'firebase-functions/lib/providers/database';
-fetch.Promise = Promise;
-
 let rest = new Client();
 
 // Get data from bmkg
