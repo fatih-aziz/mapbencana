@@ -1,0 +1,60 @@
+{
+  "surveydarisensor" : {
+    "1-Sel, 2 Jul 2019 08:57:17" : {
+      "bujur" : "106.7479546",
+      "bujurgempa" : "95.72",
+      "iduser" : "1",
+      "kuesioner" : "1",
+      "lintang" : "-6.2672344",
+      "lintanggempa" : "2.06",
+      "magnitudo" : "4.9",
+      "mmi" : "5",
+      "nama" : "coba",
+      "tanggalgempa" : "2019-07-02",
+      "waktugempa" : " 05:58:03",
+      "waktupelaporan" : "Sel, 2 Jul 2019 08:57:17"
+    },
+    "1-Sel, 2 Jul 2019 13:11:10" : {
+      "bujur" : "106.74788442",
+      "bujurgempa" : "95.72",
+      "iduser" : "1",
+      "kuesioner" : "6",
+      "lintang" : "-6.26716592",
+      "lintanggempa" : "2.06",
+      "magnitudo" : "4.9",
+      "mmi" : "8",
+      "nama" : "coba",
+      "tanggalgempa" : "2019-07-02",
+      "waktugempa" : " 05:58:03",
+      "waktupelaporan" : "Sel, 2 Jul 2019 13:11:10"
+    },
+    "2-Sab, 29 Jun 2019 13:42:26 +0700" : {
+      "bujur" : "106.7479546",
+      "bujurgempa" : "121",
+      "iduser" : "2",
+      "kuesioner" : "1",
+      "lintang" : "-6.2672344",
+      "lintanggempa" : "-2.0",
+      "magnitudo" : "4.9",
+      "mmi" : "5",
+      "nama" : "coba",
+      "tanggalgempa" : "28/06/2019",
+      "waktugempa" : "20:21:55 WIB",
+      "waktupelaporan" : "Sab, 29 Jun 2019 13:42:26 +0700"
+    },
+    "2-Sab, Jun 29, '19" : {
+      "bujur" : "106.7479546",
+      "bujurgempa" : "121",
+      "iduser" : "2",
+      "kuesioner" : "1",
+      "lintang" : "-6.2672344",
+      "lintanggempa" : "-2.0",
+      "magnitudo" : "4.9",
+      "mmi" : "5",
+      "nama" : "coba",
+      "tanggalgempa" : "28/06/2019",
+      "waktugempa" : "20:21:55 WIB",
+      "waktupelaporan" : "Sab, Jun 29, '19"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "mapbencana",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "babel": {
+    "presets": ["@babel/preset-env"]
+  },
+  "scripts": {
+    "start": "node ./bin/www",
+    "server": "nodemon --exec babel-node server.js",
+    "dev": "NODE_ENV=development npm-run-all server"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel-preset-react": "^6.24.1",
+    "dotenv": "^8.0.0",
+    "firebase-admin": "^8.2.0",
+    "firebase-functions": "^3.0.2",
+    "node-rest-client": "^3.1.0",
+    "node-rest-client-promise": "^3.1.1",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4",
+    "xml2json-light": "^1.0.6"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/node": "^7.4.5",
+    "@babel/preset-env": "^7.4.5"
+  }
+}
