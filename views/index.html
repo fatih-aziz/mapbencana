@@ -100,15 +100,15 @@
   <div id="map"></div>
 
   <script>
-    let baseUrl = window.location.origin;
+    let apiUrl = window.location.origin + ":3000";
     // $.get(baseUrl + "/api/v1/map/multisource").done(res => {
     //   console.log(res);
     // }).fail(err => {
     //   console.log(err);
     // })
   </script>
-  <script src="/assets/map.js" async defer></script>
-  <script src="/api/v1/map/init" async defer></script>
+  <script src="http://localhost:3000/assets/map.js" async defer></script>
+  <script src="http://localhost:3000/api/v1/map/init" async defer></script>
 </body>
 
 </html>
