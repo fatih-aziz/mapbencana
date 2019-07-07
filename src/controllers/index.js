@@ -45,7 +45,7 @@ module.exports = {
                 } catch (err) {
                     res.status(400).send({
                         success: false,
-                        msg: "Gagal memuat laporan gempa",
+                        msg: 'Gagal memuat laporan gempa',
                         error: err
                     })
                 }
@@ -100,10 +100,10 @@ module.exports = {
             (async function () {
                 let mergeData = {}
                 mergeData.gempaBmkg = formatData(await model.terkini.get(), 'bmkg') || {
-                    err: "Fail load gempa terkini"
+                    err: 'Fail load gempa terkini'
                 }
                 mergeData.gempaLapor = formatData(await model.lapor.get(), 'lapor') || {
-                    err: "Fail load gempa lapor"
+                    err: 'Fail load gempa lapor'
                 }
                 res.setHeader('Content-Type', 'application/json')
                 res.status(200).send({

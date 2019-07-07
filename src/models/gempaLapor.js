@@ -56,7 +56,7 @@ module.exports = {
 			return await this.model.find({}).limit(limit)
 		} catch (err) {
 			assert.ifError(err, 'Delete data fail')
-			throw new Error("Delete data fail! " + err)
+			throw new Error('Delete data fail! ' + err)
 		}
 	},
 

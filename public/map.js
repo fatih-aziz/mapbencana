@@ -3,10 +3,6 @@ var map
 $("#floating input").click(function (e) {
 	// layering
 	map.data.revertStyle()
-
-	console.log($(this).attr('name'))
-	console.log($(this).is(':checked'))
-
 	if (!$(this).is(':checked')) {
 		map.data.forEach(marker => {
 			if (marker.getProperty('type') == $(this).attr('name'))
@@ -84,39 +80,43 @@ function initMap() {
 			map.data.setStyle(function (feature) {
 				var title = 'markers-bmkg'
 				//var label = 'BMKG'
-				var icon = 'http://maps.google.com/mapfiles/ms/icons/red.png'
+				//var icon = 'http://maps.google.com/mapfiles/ms/icons/red.png'
 				if (feature.getProperty('type') != "bmkg") {
-					icon = 'http://maps.google.com/mapfiles/ms/icons/blue.png'
+					//icon = 'http://maps.google.com/mapfiles/ms/icons/blue.png'
 					//label = 'User'
 					title = 'markers-laporan'
 				}
 				return {
 					//label: label,
 					title: title,
-					icon: icon,
+					icon: 'http://inatews.bmkg.go.id/images/kedalaman.png',
 				}
 			})
 			map.data.addGeoJson(mapData)
 
 			map.data.addListener('click', function (e) {
 				var feat = e.feature
-				hideMaker(feat)
-				// Properti data: 
-				// feat.getProperty(key) // result String
-				// available key: 
-				// address: "196 km BaratDaya MALUKUTENGGARA"
-				// createdDate: "2019-07-07T17:22:53+0700"
-				// deep: "122 Km"
-				// disasterDate: "06-Jul-19 02:59:15 WIB"
-				// iduser: null
-				// lat: "6.01 LS"
-				// lng: "131 BT"
-				// mag: "5.4 SR"
-				// mmi: null
-				// name: null
-				// quiz: null
-				var html = '<b>custom html, masukin sesuai data</b>'
-				html += '<br><a class=\'map_link\' target=\'_blank\' href=\'#\'>bisa tambahin link berita kalo ada</a>'
+				var html = '<h3>' + feat.getProperty('type').toUpperCase() + '</h3>'
+				if (feat.getProperty('name'))
+					html += '<b><a>Nama : </a>' + feat.getProperty('name') + '</b>'
+				if (feat.getProperty('iduser'))
+					html += '<br><a>ID user : </a>' + feat.getProperty('iduser')
+				if (feat.getProperty('lat'))
+					html += '<br><a>Lokasi : </a>' + feat.getProperty('lat') + ', ' + feat.getProperty('lng')
+				if (feat.getProperty('address'))
+					html += '<br><a>( </a>' + feat.getProperty('address')
+				if (feat.getProperty('quiz'))
+					html += '<a> )</a><br><a>Kuisioner : </a>' + feat.getProperty('quiz')
+				if (feat.getProperty('mmi'))
+					html += '<br><a>Intensitas : </a>' + feat.getProperty('mmi')
+				if (feat.getProperty('mag'))
+					html += '<br><a>Magnitudo : </a>' + feat.getProperty('mag')
+				if (feat.getProperty('deep'))
+					html += '<br><a>Kedalaman : </a>' + feat.getProperty('deep')
+				if (feat.getProperty('disasterDate'))
+					html += '<br><a>Waktu gempa : </a>' + feat.getProperty('disasterDate')
+				if (feat.getProperty('createdDate'))
+					html += '<br><a>Input server (GMT) : </a>' + feat.getProperty('createdDate')
 
 				infowindow.setContent(html)
 				infowindow.setPosition(e.latLng)

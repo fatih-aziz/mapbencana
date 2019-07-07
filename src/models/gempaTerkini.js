@@ -54,7 +54,7 @@ module.exports = {
 				let del = await this.model.deleteMany({})
 				if (!del.ok) {
 					assert.ifError(err, 'Delete data fail')
-					throw new Error("Delete data fail!")
+					throw new Error('Delete data fail!')
 				}
 				let formated = data.map(el => {
 					let split = el.point.coordinates.split(',')
