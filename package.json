@@ -9,9 +9,12 @@
     ]
   },
   "scripts": {
-    "build-funcs": "babel src/functions --out-dir dist/functions",
-    "start": "nodemon --exec babel-node index.js",
-    "server": "nodemon --exec babel-node index.js",
+    "build": "npm i && npm run fix",
+    "fix": "npm audit fix",
+    "clean": "rmdir .dist",
+    "compile": "babel src --out-dir .dist --source-maps --watch",
+    "start": "nodemon --exec babel-node src/middleware.js",
+    "server": "nodemon --exec babel-node src/middleware.js",
     "dev": "NODE_ENV=development npm-run-all server"
   },
   "engines": {
@@ -21,6 +24,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "dateformat": "^3.0.3",
     "dotenv": "^8.0.0",
     "ejs": "^2.6.2",
     "express": "^4.17.1",
@@ -31,15 +35,15 @@
     "node-rest-client": "^3.1.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
-    "stream": "0.0.2",
-    "timers": "^0.1.1"
+    "xml2json-light": "^1.0.6"
   },
   "devDependencies": {
-    "@babel/cli": "^7.4.4",
-    "@babel/core": "^7.4.5",
-    "@babel/node": "^7.4.5",
-    "@babel/preset-env": "^7.4.5",
+    "@babel/cli": "^7.5.0",
+    "@babel/core": "^7.5.0",
+    "@babel/node": "^7.5.0",
+    "@babel/preset-env": "^7.5.0",
     "@babel/register": "^7.4.4",
-    "babel-preset-react": "^6.24.1"
+    "babel-preset-react": "^6.24.1",
+    "npm-check-updates": "^3.1.15"
   }
 }
