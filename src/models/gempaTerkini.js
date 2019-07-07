@@ -1,33 +1,28 @@
 import mongoose from 'mongoose'
 
 const gempaSchema = new mongoose.Schema({
-	Tanggal: {
+	lat: {
+		alias: 'lintang',
 		type: String,
 	},
-	Jam: {
+	lng: {
+		alias: 'bujur',
 		type: String,
 	},
-	Bujur: {
-		type: String,
+	coords: Object,
+	address: {
+		alias: 'tempat',
+		type: String
 	},
-	point: {
-		type: Object,
+	mag: Number,
+	deep: Number,
+	disasterDate: {
+		type: Date,
+		alias: 'waktukejadian',
 	},
-	Lintang: {
-		type: String,
+	createdDate: {
+		type: Date,
 	},
-	Magnitude: {
-		type: String,
-	},
-	Kedalaman: {
-		type: String,
-	},
-	_symbol: {
-		type: String,
-	},
-	Wilayah: {
-		type: String,
-	}
 })
 const terkini = mongoose.model('gempaterkini', gempaSchema)
 module.exports = {
@@ -46,8 +41,31 @@ module.exports = {
 	},
 
 	create: function (data) {
-		const model = new this.model(data)
-		model.save()
+		console.log(data)
+		// const model = new this.model(data)
+		// model.save()
+	},
+	sync: function (data, call) {
+		this.model.deleteMany({}, (err, res) => {
+			if (err)
+				assert.ifError(err)
+			else {
+				let formated = data.mapInLoop(el => {
+					let split = el.point.coordinates.split(',')
+					return {
+						lat: el.Lintang,
+						lng: el.Bujur,
+						coords: [split[1], split[0], ],
+						address: el.Wilayah,
+						mag: el.Magnitude,
+						deep: el.Kedalaman,
+						disasterDate: el.Tanggal + ' ' + el.Jam,
+						createdDate: dateFormat(new Date(), 'isoDateTime'),
+					}
+				})
+				this.model.insertMany(formated, call)
+			}
+		})
 	}
 }
 export default terkini

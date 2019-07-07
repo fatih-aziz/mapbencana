@@ -1,33 +1,42 @@
 import mongoose from 'mongoose'
 
 const gempaSchema = new mongoose.Schema({
-	nama: {
+	name: {
 		type: String,
+		alias: 'nama',
 		required: true,
 	},
 	iduser: {
 		type: Number,
 		required: true,
 	},
-	lintang: {
+	lat: {
+		alias: 'lintang',
 		type: Number,
 	},
-	bujur: {
+	lng: {
+		alias: 'bujur',
 		type: Number,
 	},
-	tempat: {
+	coords: Object,
+	address: {
+		alias: 'tempat',
 		type: String
 	},
-	kuisioner: {
+	quiz: {
 		type: String,
-		alias: 'quiz',
+		alias: 'kuisioner',
 	},
 	mmi: {
 		type: String,
 	},
-	time: {
+	disasterDate: {
 		type: Date,
-		alias: 'reportTime',
+		alias: 'waktukejadian',
+	},
+	createdDate: {
+		type: Date,
+		alias: 'waktupelaporan',
 	},
 })
 const lapor = mongoose.model('gempalapor', gempaSchema)
@@ -47,6 +56,8 @@ module.exports = {
 	},
 
 	create: function (data, call) {
+		data.coords = [data.lat, data.lng]
+		data.waktupelaporan = data.waktupelaporan || dateFormat(new Date(), 'isoDateTime')
 		const model = new this.model(data)
 		model.save(call)
 	}

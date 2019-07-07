@@ -1,4 +1,7 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-prototype-builtins */
+import formatcoords from 'formatcoords'
+
 if (!Object.prototype.forInLoop) {
 	Object.defineProperty(Object.prototype, 'forInLoop', {
 		value: function (callback, thisArg) {
@@ -69,16 +72,77 @@ global.formatData = function (data, type) {
 		data.mapInLoop((res) => {
 			return {
 				idUser: data.iduser,
-				nama: data.nama,
+				nama: data.name,
 				mag: null,
 				time: '02-Jul-19 03:39:50 WIB',
 				reportTime: data.reportTime,
-				newslink: null,
 				mmi: null,
 				quiz: data.quiz,
 				address: '101 km TimurLaut MALUKUBRTDAYA',
 				coords: [128.49, -7]
 			}
 		})
+	} else if (type == 'bmkg') {
+
+		// direct map cuz data already array 
+		return data.map(el => {
+			let formatCord = formatcoords(el.point.coordinates).format('-d', {
+				latLonSeparator: ','
+			})
+			let split = formatCord.split(',')
+			return {
+				name: null,
+				iduser: null,
+				lat: el.Lintang,
+				lng: el.Bujur,
+				quiz: null,
+				mmi: null,
+				mag: el.Magnitude,
+				deep: el.Kedalaman,
+				address: el.Wilayah,
+				coords: [split[0], split[1]],
+				disasterDate: el.Tanggal + ' ' + el.Jam,
+				createdDate: dateFormat(new Date(), 'isoDateTime'),
+			}
+		})
+	}
+}
+
+global.saveJson = function (filename, obj, callback) {
+	let path = appRoot + '/../tmp/' + filename
+	fs.readFile(path, 'utf8', function readFileCallback(err, data) {
+		if (err || !data) {
+			let cont = []
+			cont.push(obj)
+			let json = JSON.stringify(cont)
+			if (callback)
+				fs.writeFile(path, json, 'utf8', callback)
+			else
+				fs.writeFile(path, json, 'utf8', (err) => {
+					console.log(err)
+				})
+		} else {
+			let cont = JSON.parse(data)
+			cont.push(obj)
+			let json = JSON.stringify(cont)
+			if (callback)
+				fs.writeFile(path, json, 'utf8', callback)
+			else
+				fs.writeFile(path, json, 'utf8', (err) => {
+					console.log(err)
+				})
+		}
+	})
+}
+
+global.assert = {
+	saveToJson: function name(msg) {
+		saveJson('error.json', new Error(msg).toString())
+	},
+	ok: function (cond, msg) {
+		if (!cond) this.saveToJson(msg)
+	},
+	ifError: function (cond, msg) {
+		if (cond) this.saveToJson(msg)
 	}
 }

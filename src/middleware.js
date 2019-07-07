@@ -1,6 +1,5 @@
 'use strict'
 import express from 'express'
-import assert from 'assert'
 import * as bodyParser from 'body-parser'
 import 'express-group-routes'
 import * as dotenv from 'dotenv'
@@ -12,11 +11,11 @@ import path from 'path'
 import dateFormat from 'dateformat'
 
 // make them global
+global.fs = require('fs')
 global.dateFormat = dateFormat
 global.Promise = Promise
 global.xml2js = parser.xml2json
 global.rp = rp
-global.assert = assert
 global.appRoot = path.dirname(require.main.filename)
 // eslint-disable-next-line no-undef
 require(appRoot + '/library/helpers')

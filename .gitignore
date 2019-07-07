@@ -66,3 +66,6 @@ node_modules/
 
 # Compiled
 .dist
+
+# Compiled
+tmp

@@ -1,11 +1,39 @@
 import mongoose from 'mongoose'
 
-const gempaSchema = new mongoose.Schema({})
+const gempaSchema = new mongoose.Schema({
+	origine_time: {
+		type: Date,
+		required: true,
+	},
+	kondisi: String,
+	intesitas: {
+		type: String,
+		alias: 'mmi'
+	},
+	magnitude: {
+		type: Number,
+		alias: 'mag'
+	},
+	latitude: {
+		type: Number,
+		alias: 'lat'
+	},
+	longitude: {
+		type: Number,
+		alias: 'lng'
+	},
+	createdDate: {
+		type: Number,
+		alias: 'create'
+
+	},
+})
 const analisa = mongoose.model('gempaanalisa', gempaSchema)
 module.exports = {
 	model: analisa,
 	check: function (conn) {
 		let model = this.model
+		// eslint-disable-next-line no-undef
 		return isCollectionExist(conn, model)
 	},
 
