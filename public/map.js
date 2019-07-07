@@ -1,9 +1,23 @@
 // Gempa UI
 var map
+$("#floating input").click(function (e) {
+	// layering
+	map.data.revertStyle()
+
+	console.log($(this).attr('name'))
+	console.log($(this).is(':checked'))
+
+	if (!$(this).is(':checked')) {
+		map.data.forEach(marker => {
+			if (marker.getProperty('type') == $(this).attr('name'))
+				map.data.overrideStyle(marker, {
+					visible: false
+				})
+		})
+	}
+})
 
 function initMap() {
-
-	var markType = 'marker'
 
 	map = new google.maps.Map(document.getElementById('map'), {
 		center: {
@@ -30,32 +44,63 @@ function initMap() {
 
 	$.get(apiUrl + '/api/v1/map/multisource')
 		.done(data => {
-			var bmkg = data.data.bmkg.map(function (data) {
-				return {
-					type: 'Feature',
-					properties: data,
-					geometry: {
-						type: 'Point',
-						coordinates: [parseFloat(data.coords[0]), parseFloat(data.coords[1])]
+			var bmkg = data.data.gempaBmkg.reduce(function (arr, el) {
+				if (typeof el.coords == "object") {
+					el.type = 'bmkg'
+					var newEl = {
+						type: 'Feature',
+						properties: el,
+						geometry: {
+							type: 'Point',
+							coordinates: [parseFloat(el.coords[0]), parseFloat(el.coords[1])]
+						}
 					}
+					arr.push(newEl)
 				}
-			})
+				return arr;
+			}, [])
+			var lapor = data.data.gempaLapor.reduce(function (arr, el) {
+				if (typeof el.coords == "object") {
+					el.type = 'lapor'
+					var newEl = {
+						type: 'Feature',
+						properties: el,
+						geometry: {
+							type: 'Point',
+							coordinates: [parseFloat(el.coords[0]), parseFloat(el.coords[1])]
+						}
+					}
+					arr.push(newEl)
+				}
+				return arr;
+			}, [])
+			mapFeatures = bmkg.concat(lapor)
 			var mapData = {
 				type: 'FeatureCollection',
-				features: bmkg
+				features: mapFeatures
 			}
-			console.log(mapData)
 			var infowindow = new google.maps.InfoWindow()
 
 			map.data.setStyle(function (feature) {
+				var title = 'markers-bmkg'
+				//var label = 'BMKG'
+				var icon = 'http://maps.google.com/mapfiles/ms/icons/red.png'
+				if (feature.getProperty('type') != "bmkg") {
+					icon = 'http://maps.google.com/mapfiles/ms/icons/blue.png'
+					//label = 'User'
+					title = 'markers-laporan'
+				}
 				return {
-					icon: 'http://maps.google.com/mapfiles/ms/icons/red.png',
+					//label: label,
+					title: title,
+					icon: icon,
 				}
 			})
 			map.data.addGeoJson(mapData)
+
 			map.data.addListener('click', function (e) {
 				var feat = e.feature
-
+				hideMaker(feat)
 				// Properti data: 
 				// feat.getProperty(key) // result String
 				// available key: 

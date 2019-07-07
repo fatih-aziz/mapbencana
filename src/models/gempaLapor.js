@@ -51,8 +51,13 @@ module.exports = {
 		this.model.find(opt, call)
 	},
 
-	get: function (call, limit) {
-		this.model.find(call).limit(limit)
+	get: async function (limit) {
+		try {
+			return await this.model.find({}).limit(limit)
+		} catch (err) {
+			assert.ifError(err, 'Delete data fail')
+			throw new Error("Delete data fail! " + err)
+		}
 	},
 
 	create: function (data, call) {

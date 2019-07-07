@@ -69,41 +69,26 @@ global.isCollectionExist = function (conn, model) {
 
 global.formatData = function (data, type) {
 	if (type == 'lapor') {
-		data.mapInLoop((res) => {
-			return {
-				idUser: data.iduser,
-				nama: data.name,
-				mag: null,
-				time: '02-Jul-19 03:39:50 WIB',
-				reportTime: data.reportTime,
-				mmi: null,
-				quiz: data.quiz,
-				address: '101 km TimurLaut MALUKUBRTDAYA',
-				coords: [128.49, -7]
-			}
-		})
-	} else if (type == 'bmkg') {
-
 		// direct map cuz data already array 
 		return data.map(el => {
-			let formatCord = formatcoords(el.point.coordinates).format('-d', {
+			if (el.coords instanceof Array) {
+				let formatCord = formatcoords(el.coords.join()).format('-d', {
+					latLonSeparator: ','
+				})
+				let split = formatCord.split(',')
+				el.coords = [split[0], split[1]]
+			}
+			return el
+		})
+	} else if (type == 'bmkg') {
+		// direct map cuz data already array 
+		return data.map(el => {
+			let formatCord = formatcoords(el.coords.join()).format('-d', {
 				latLonSeparator: ','
 			})
 			let split = formatCord.split(',')
-			return {
-				name: null,
-				iduser: null,
-				lat: el.Lintang,
-				lng: el.Bujur,
-				quiz: null,
-				mmi: null,
-				mag: el.Magnitude,
-				deep: el.Kedalaman,
-				address: el.Wilayah,
-				coords: [split[0], split[1]],
-				disasterDate: el.Tanggal + ' ' + el.Jam,
-				createdDate: dateFormat(new Date(), 'isoDateTime'),
-			}
+			el.coords = [split[0], split[1]]
+			return el
 		})
 	}
 }
@@ -119,7 +104,8 @@ global.saveJson = function (filename, obj, callback) {
 				fs.writeFile(path, json, 'utf8', callback)
 			else
 				fs.writeFile(path, json, 'utf8', (err) => {
-					console.log(err)
+					if (err)
+						console.log(err)
 				})
 		} else {
 			let cont = JSON.parse(data)
@@ -129,7 +115,8 @@ global.saveJson = function (filename, obj, callback) {
 				fs.writeFile(path, json, 'utf8', callback)
 			else
 				fs.writeFile(path, json, 'utf8', (err) => {
-					console.log(err)
+					if (err)
+						console.log(err)
 				})
 		}
 	})
@@ -137,7 +124,11 @@ global.saveJson = function (filename, obj, callback) {
 
 global.assert = {
 	saveToJson: function name(msg) {
-		saveJson('error.json', new Error(msg).toString())
+		console.log(msg)
+		saveJson('error.json', {
+			msg: new Error(msg).toString(),
+			createdDate: dateFormat(new Date(), 'isoDateTime')
+		})
 	},
 	ok: function (cond, msg) {
 		if (!cond) this.saveToJson(msg)

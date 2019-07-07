@@ -3,16 +3,6 @@
 // import mysql from "mysql";
 // eslint-disable-next-line no-undef
 const model = require(appRoot + '/models/index.js')
-let bmkg = function () {
-    return new Promise((acc, rej) => {
-        rp.get('http://data.bmkg.go.id/gempaterkini.xml')
-            .then(res => xml2js(res).Infogempa.gempa)
-            .then(fromRp => acc(fromRp))
-            .catch(err => {
-                rej(err)
-            })
-    })
-}
 // make public functions
 module.exports = {
     constructor: function (a, b) {},
@@ -45,76 +35,82 @@ module.exports = {
             })
         },
         index: (req, res) => {
-            model.lapor.get((err, result) => {
-                res.status(200).send({
-                    success: true,
-                    data: result
-                })
-            })
-        }
+            (async function () {
+                try {
+                    let data = formatData(await model.lapor.get(), 'lapor')
+                    res.status(200).send({
+                        success: true,
+                        data: data
+                    })
+                } catch (err) {
+                    res.status(400).send({
+                        success: false,
+                        msg: "Gagal memuat laporan gempa",
+                        error: err
+                    })
+                }
+            })()
+        },
     },
     // controll bmkg
     bmkg: {
         sync: function (req, res) {
             bmkg().then(data => {
                 model.terkini.sync(data, (err, result) => {
-                    res.status(200).send({
-                        success: true,
-                        data: result
-                    })
+                    if (err) {
+                        assert.ifError(err, 'Syncron Fail :' + err)
+                        res.status(400).send({
+                            success: false,
+                            msg: 'Syncron Fail, Insert data fail',
+                            err: err
+                        })
+                    } else
+                        res.status(200).send({
+                            success: true,
+                            data: result
+                        })
+                })
+            }).catch(err => {
+                res.status(400).send({
+                    success: false,
+                    msg: 'Syncron Fail, BMKG Offline',
+                    err: err
                 })
             })
         },
         get: function (req, res) {
             res.setHeader('Content-Type', 'application/json')
-            bmkg().then(data => {
-                res.status(200).send({
-                    success: true,
-                    data: data
+            model.terkini.get().then(data => {
+                    res.status(200).send({
+                        status: true,
+                        data: formatData(data, 'bmkg'),
+                    })
                 })
-            }).catch(err => {
-                if (err.code == 'ENOTFOUND')
-                    res.status(404).send({
-                        error: `${err.hostname}: 404 - NOT FOUND`
+                .catch(err => {
+                    res.status(400).send({
+                        status: false,
+                        msg: 'Gagal memuat database Gempa Terkini',
+                        error: err
                     })
-                else
-                    res.status(500).send({
-                        error: '500 - Internal Server Error'
-                    })
-            })
+                })
         }
     },
     multiSource: {
         get: function (req, res) {
-            // let laporAsync = Promise.promisifyAll(model.lapor)
-            // let bmkgAsync = bmkg
-            // let terkiniAsync = Promise.promisifyAll(model.terkini)
-            // console.log(laporAsync)
-            // console.log(bmkgAsync)
-            // console.log(terkiniAsync)
-            res.setHeader('Content-Type', 'application/json')
-            let mergeData = {}
-            bmkg().then(data => {
-                mergeData.bmkg = formatData(data, 'bmkg')
-            }).then(() => {
+            (async function () {
+                let mergeData = {}
+                mergeData.gempaBmkg = formatData(await model.terkini.get(), 'bmkg') || {
+                    err: "Fail load gempa terkini"
+                }
+                mergeData.gempaLapor = formatData(await model.lapor.get(), 'lapor') || {
+                    err: "Fail load gempa lapor"
+                }
+                res.setHeader('Content-Type', 'application/json')
                 res.status(200).send({
                     status: true,
                     data: mergeData
                 })
-            }).catch(err => {
-                if (err.code == 'ENOTFOUND')
-                    res.status(404).send({
-                        status: false,
-                        msg: `${err.hostname}: 404 - NOT FOUND`,
-                        err: err
-                    })
-                else
-                    res.status(500).send({
-                        status: false,
-                        msg: '500 - Internal Server Error',
-                        err: err
-                    })
-            })
+            })()
         }
     }
 }

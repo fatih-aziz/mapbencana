@@ -12,6 +12,8 @@ import dateFormat from 'dateformat'
 
 // make them global
 global.fs = require('fs')
+global.r2 = require('r2')
+global.fetch = require('node-fetch')
 global.dateFormat = dateFormat
 global.Promise = Promise
 global.xml2js = parser.xml2json
