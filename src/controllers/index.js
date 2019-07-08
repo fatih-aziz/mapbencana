@@ -9,7 +9,7 @@ const saltRound = 10
 module.exports = {
     admin: {
         index: (req, res) => {
-            res.send("FUCK");
+            res.render('admin')
         }
     },
     user: {
@@ -17,7 +17,10 @@ module.exports = {
             (async () => {
                 model.user.get()
                     .then(data => {
-                        res.status(200).send(data)
+                        res.status(200).send({
+                            status: true,
+                            data: data
+                        })
                     })
             })()
         },

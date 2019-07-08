@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+const AutoIncrement = require('mongoose-sequence')(mongoose)
 
 const gempaSchema = new mongoose.Schema({
 	name: {
@@ -55,6 +56,11 @@ const gempaSchema = new mongoose.Schema({
 		alias: 'waktupelaporan',
 	},
 })
+
+gempaSchema.plugin(AutoIncrement, {
+	inc_field: 'idlapor'
+})
+
 const lapor = mongoose.model('gempalapor', gempaSchema)
 module.exports = {
 	model: lapor,
@@ -78,7 +84,10 @@ module.exports = {
 
 	createArray: async function (data) {
 		try {
-			return await this.model.insertMany(data)
+			data.forEach(el => {
+				this.model.create(el)
+			})
+			return data
 		} catch (err) {
 			throw new Error(err)
 		}

@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import mongoose from 'mongoose'
 
+// menambahkan idbmkg adalah ide buruk, karna datanya terus update, idbmkgnya terus nambah sampai angka yg ga wajar
 const gempaSchema = new mongoose.Schema({
 	lat: {
 		alias: 'lintang',
@@ -38,13 +39,10 @@ async function bmkg() {
 const terkini = mongoose.model('gempaterkini', gempaSchema)
 module.exports = {
 	model: terkini,
+
 	check: function (conn) {
 		let model = this.model
 		return isCollectionExist(conn, model)
-	},
-
-	find: function (opt, call) {
-		this.model.find(opt, call)
 	},
 
 	get: async function (opt) {
@@ -77,12 +75,5 @@ module.exports = {
 		}
 	},
 
-	createMany: function (data, call) {
-		this.model.insertMany(data, call)
-	},
-
-	create: function (data, call) {
-		this.model.insert(data, call)
-	},
 }
 export default terkini

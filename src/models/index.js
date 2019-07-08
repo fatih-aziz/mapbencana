@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable indent */
+
 global.ObjectID = require('mongodb').ObjectID
 import mongoose from 'mongoose'
 const analisa = require('./gempaAnalisa')
@@ -9,11 +10,10 @@ const user = require('./user')
 
 mongoose.connect(process.env.DBMAIN_URL + process.env.DBMAIN_DB1, {
     useNewUrlParser: true
-}).then(() => {
-
-}).catch((err) => {
+}).then(() => {}).catch((err) => {
     console.log(err)
 })
+
 var conn = mongoose.connection
 mongoose.Promise = global.Promise
 // mongoose.set('debug', true);

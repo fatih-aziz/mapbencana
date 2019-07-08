@@ -1,5 +1,7 @@
 // Gempa UI
 var map
+
+// listerner utk layering
 $("#floating input").click(function (e) {
 	// layering
 	map.data.revertStyle()
@@ -70,11 +72,14 @@ function initMap() {
 				}
 				return arr;
 			}, [])
-			mapFeatures = bmkg.concat(lapor)
+			mapFeatures = bmkg.concat(lapor) // gabung array
+
+			// inisialisasi aturan geoJson
 			var mapData = {
 				type: 'FeatureCollection',
 				features: mapFeatures
 			}
+
 			var infowindow = new google.maps.InfoWindow()
 
 			map.data.setStyle(function (feature) {
@@ -92,8 +97,11 @@ function initMap() {
 					icon: 'http://inatews.bmkg.go.id/images/kedalaman.png',
 				}
 			})
+
+			// menaruh data ke map, menggambarnya
 			map.data.addGeoJson(mapData)
 
+			// listerner untuk klik window,
 			map.data.addListener('click', function (e) {
 				var feat = e.feature
 				var html = '<h3>' + feat.getProperty('type').toUpperCase() + '</h3>'
