@@ -124,16 +124,21 @@ global.saveJson = function (filename, obj, callback) {
 
 global.assert = {
 	saveToJson: function name(msg) {
-		console.log(msg)
 		saveJson('error.json', {
 			msg: new Error(msg).toString(),
 			createdDate: dateFormat(new Date(), 'isoDateTime')
 		})
 	},
 	ok: function (cond, msg) {
-		if (!cond) this.saveToJson(msg)
+		if (!cond) {
+			console.log(`${msg} : ${cond}`)
+			this.saveToJson(msg)
+		}
 	},
 	ifError: function (cond, msg) {
-		if (cond) this.saveToJson(msg)
+		if (cond) {
+			console.log(`${msg} : ${cond}`)
+			this.saveToJson(msg)
+		}
 	}
 }

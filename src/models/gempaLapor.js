@@ -4,7 +4,7 @@ const gempaSchema = new mongoose.Schema({
 	name: {
 		type: String,
 		alias: 'nama',
-		required: true,
+		required: true
 	},
 	iduser: {
 		type: Number,
@@ -17,6 +17,22 @@ const gempaSchema = new mongoose.Schema({
 	lng: {
 		alias: 'bujur',
 		type: Number,
+	},
+	mag: {
+		type: String,
+		alias: 'magnitudo'
+	},
+	lintanggempa: {
+		type: String,
+	},
+	bujurgempa: {
+		type: String,
+	},
+	tanggalgempa: {
+		type: String,
+	},
+	waktugempa: {
+		type: String,
 	},
 	coords: Object,
 	address: {
@@ -31,11 +47,11 @@ const gempaSchema = new mongoose.Schema({
 		type: String,
 	},
 	disasterDate: {
-		type: Date,
+		type: String,
 		alias: 'waktukejadian',
 	},
 	createdDate: {
-		type: Date,
+		type: String,
 		alias: 'waktupelaporan',
 	},
 })
@@ -60,11 +76,17 @@ module.exports = {
 		}
 	},
 
-	create: function (data, call) {
-		data.coords = [data.lat, data.lng]
-		data.waktupelaporan = data.waktupelaporan || dateFormat(new Date(), 'isoDateTime')
+	createArray: async function (data) {
+		try {
+			return await this.model.insertMany(data)
+		} catch (err) {
+			throw new Error(err)
+		}
+	},
+
+	create: async function (data) {
 		const model = new this.model(data)
-		model.save(call)
+		return await model.save()
 	}
 }
 export default lapor
