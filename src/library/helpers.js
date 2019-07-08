@@ -90,6 +90,16 @@ global.formatData = function (data, type) {
 			el.coords = [split[0], split[1]]
 			return el
 		})
+	} else if (type == 'lapor_old') {
+		return data.map(el => {
+			let data = {
+				lintang: el.lintang,
+				bujur: el.bujur,
+				mmi: el.mmi,
+				name: el.name,
+			}
+			return data
+		})
 	}
 }
 

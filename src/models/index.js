@@ -5,7 +5,7 @@ import mongoose from 'mongoose'
 const analisa = require('./gempaAnalisa')
 const lapor = require('./gempaLapor')
 const terkini = require('./gempaTerkini')
-const User = require('./user')
+const user = require('./user')
 
 mongoose.connect(process.env.DBMAIN_URL + process.env.DBMAIN_DB1, {
     useNewUrlParser: true
@@ -28,7 +28,7 @@ analisa.check(connA).then((res) => {
 lapor.check(connA).then((res) => {
     assert.ok(res, 'Collection survey not found')
 })
-User.check(connA).then((res) => {
+user.check(connA).then((res) => {
     assert.ok(res, 'Collection User not found')
 })
 
@@ -36,5 +36,5 @@ module.exports = {
     terkini: terkini,
     lapor: lapor,
     analisa: analisa,
-    User: User,
+    user: user,
 }

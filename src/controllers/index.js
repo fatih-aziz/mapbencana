@@ -3,9 +3,85 @@
 // import mysql from "mysql";
 // eslint-disable-next-line no-undef
 const model = require(appRoot + '/models/index.js')
+import bcrypt from 'bcrypt'
+const saltRound = 10
 // make public functions
 module.exports = {
-    constructor: function (a, b) {},
+    admin: {
+        index: (req, res) => {
+            res.send("FUCK");
+        }
+    },
+    user: {
+        index: (req, res) => {
+            (async () => {
+                model.user.get()
+                    .then(data => {
+                        res.status(200).send(data)
+                    })
+            })()
+        },
+        post: (req, res) => {
+            (async () => {
+                let data = req.body
+                data.password = await bcrypt.hash(data.password, saltRound)
+                try {
+                    await model.user.create(data) || false
+                    res.status(200).send({
+                        value: 1,
+                        status: true,
+                        message: 'Register berhasil, silahkan login!'
+                    })
+                } catch (err) {
+                    let errorMessage = "Gagal mendaftarkan user"
+                    if (err.toString().match(/nama: Path `nama`/g))
+                        errorMessage = "Data belum lengkap"
+                    else if (err.toString().match(/expected `email` to be unique/g))
+                        errorMessage = "Oopps, email anda telah terdaftar sebelumnya"
+                    res.status(400).send({
+                        value: 0,
+                        error: err.toString(),
+                        status: false,
+                        message: errorMessage
+                    })
+                }
+            })()
+        },
+        login: (req, res) => {
+            (async () => {
+                let data = req.body
+                try {
+                    let user = await model.user.login({
+                        email: data.email
+                    }) || false
+                    if (!user)
+                        throw new Error("email not found")
+                    let passw = await bcrypt.compare(data.password, user.password)
+                    if (!passw)
+                        throw new Error("password not match")
+                    res.status(200).send({
+                        value: 1,
+                        status: true,
+                        nama: user.nama,
+                        nama: user.iduser,
+                        message: 'Selamat datang! ' + user.nama
+                    })
+                } catch (err) {
+                    let errorMessage = "Gagal mendaftarkan user"
+                    if (err.toString().match(/email not found/g))
+                        errorMessage = "Oopss, Username salah"
+                    else if (err.toString().match(/password not match/g))
+                        errorMessage = "Oopps, Password salah"
+                    res.status(400).send({
+                        value: 0,
+                        error: err.toString(),
+                        status: false,
+                        message: errorMessage
+                    })
+                }
+            })()
+        }
+    },
     // controll lapor
     lapor: {
         post: (req, res, next) => {
@@ -98,15 +174,18 @@ module.exports = {
         index: (req, res) => {
             (async function () {
                 try {
-                    let data = formatData(await model.lapor.get(), 'lapor')
+                    let data = formatData(await model.lapor.get(), req.query.type || 'lapor')
                     res.status(200).send({
                         success: true,
+                        value: 1,
+                        message: "Berhasil memuat data laporan gempa",
                         data: data
                     })
                 } catch (err) {
                     res.status(400).send({
                         success: false,
-                        msg: 'Gagal memuat laporan gempa',
+                        value: 0,
+                        message: 'Gagal memuat laporan gempa',
                         error: err.toString()
                     })
                 }
@@ -140,7 +219,6 @@ module.exports = {
             })
         },
         get: function (req, res) {
-            res.setHeader('Content-Type', 'application/json')
             model.terkini.get().then(data => {
                     res.status(200).send({
                         status: true,
