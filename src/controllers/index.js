@@ -88,9 +88,9 @@ module.exports = {
     // controll lapor
     lapor: {
         post: (req, res, next) => {
-            // console.log(req);
-            if (req.body instanceof Array) {
-                let formated = req.body.map(el => {
+            let postData = req.body
+            if (postData instanceof Array) {
+                let formated = postData.map(el => {
                     if (!el.waktukejadian || el.waktukejadian == 0)
                         el.waktukejadian = null
                     if (!el.waktupelaporan || el.waktupelaporan == 0)
@@ -100,7 +100,7 @@ module.exports = {
                         iduser: el.iduser,
                         lat: el.lintang || el.lat,
                         lng: el.bujur || el.lng,
-                        quiz: el.kuisioner || el.quiz,
+                        quiz: el.kuisioner || el.kuesioner || el.quiz,
                         mmi: el.mmi,
                         tempat: el.tempat || el.address,
                         waktukejadian: el.waktukejadian,
@@ -128,26 +128,26 @@ module.exports = {
                         })
                     }
                 })()
-            } else if (req.body.iduser) {
-                if (!req.body.waktukejadian || req.body.waktukejadian == 0)
-                    req.body.waktukejadian = null
-                if (!req.body.waktupelaporan || req.body.waktupelaporan == 0)
-                    req.body.waktupelaporan = dateFormat(Date(), 'isoDateTime')
+            } else if (postData.iduser) {
+                if (!postData.waktukejadian || postData.waktukejadian == 0)
+                    postData.waktukejadian = null
+                if (!postData.waktupelaporan || postData.waktupelaporan == 0)
+                    postData.waktupelaporan = dateFormat(Date(), 'isoDateTime')
                 let data = {
-                    nama: req.body.nama || "anonymous",
-                    iduser: req.body.iduser,
-                    lat: req.body.lintang || req.body.lat,
-                    lng: req.body.bujur || req.body.lng,
-                    quiz: req.body.kuisioner || req.body.quiz,
-                    mmi: req.body.mmi,
-                    tempat: req.body.tempat || req.body.address,
-                    waktukejadian: req.body.waktukejadian,
-                    bujurgempa: req.body.bujurgempa,
-                    lintanggempa: req.body.lintanggempa,
-                    tanggalgempa: req.body.tanggalgempa,
-                    waktugempa: req.body.waktugempa,
-                    waktupelaporan: req.body.waktupelaporan,
-                    coords: [req.body.bujur, req.body.lintang]
+                    nama: postData.nama || "anonymous",
+                    iduser: postData.iduser,
+                    lat: postData.lintang || postData.lat,
+                    lng: postData.bujur || postData.lng,
+                    quiz: postData.kuisioner || postData.quiz,
+                    mmi: postData.mmi,
+                    tempat: postData.tempat || postData.address,
+                    waktukejadian: postData.waktukejadian,
+                    bujurgempa: postData.bujurgempa,
+                    lintanggempa: postData.lintanggempa,
+                    tanggalgempa: postData.tanggalgempa,
+                    waktugempa: postData.waktugempa,
+                    waktupelaporan: postData.waktupelaporan,
+                    coords: [postData.bujur, postData.lintang]
                 };
                 (async function () {
                     try {
