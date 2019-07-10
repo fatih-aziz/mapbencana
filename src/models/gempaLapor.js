@@ -42,7 +42,7 @@ const gempaSchema = new mongoose.Schema({
 	},
 	quiz: {
 		type: String,
-		alias: 'kuisioner',
+		alias: 'kuesioner',
 	},
 	mmi: {
 		type: String,

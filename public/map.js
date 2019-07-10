@@ -85,16 +85,16 @@ function initMap() {
 			map.data.setStyle(function (feature) {
 				var title = 'markers-bmkg'
 				//var label = 'BMKG'
-				//var icon = 'http://maps.google.com/mapfiles/ms/icons/red.png'
+				var icon = 'http://inatews.bmkg.go.id/images/kedalaman.png'
 				if (feature.getProperty('type') != "bmkg") {
-					//icon = 'http://maps.google.com/mapfiles/ms/icons/blue.png'
+					icon = 'https://image.flaticon.com/icons/png/128/235/235252.png'
 					//label = 'User'
 					title = 'markers-laporan'
 				}
 				return {
 					//label: label,
 					title: title,
-					icon: 'http://inatews.bmkg.go.id/images/kedalaman.png',
+					icon: icon,
 				}
 			})
 
